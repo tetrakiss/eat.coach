@@ -16,7 +16,7 @@ export default {
       customer: []
     }
   },
-  firestore() {
+  firestore () {
     return {
 
       customer: db.collection('customers').doc(this.$route.params.customer)
