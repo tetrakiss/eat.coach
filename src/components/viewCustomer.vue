@@ -7,6 +7,27 @@
     <div  class="inCatagory"><font-awesome-icon icon="envelope-open" class="marginRight"></font-awesome-icon>{{ customer.email }}</div>
     <div class="inCatagory"><font-awesome-icon icon="calendar" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
     <div  class="inCatagory"><font-awesome-icon icon="calendar-check" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
+    <div  class="inCatagory"><el-tag
+  :key="tag"
+  v-for="tag in dynamicTags"
+  closable
+  :disable-transitions="false"
+  @close="handleClose(tag)">
+  {{tag.tag}}
+</el-tag>
+<el-input
+  class="input-new-tag"
+  v-if="inputVisible"
+  v-model="inputValue"
+  ref="saveTagInput"
+  size="mini"
+  @keyup.enter.native="handleInputConfirm"
+  @blur="handleInputConfirm"
+>
+</el-input>
+<el-button v-else class="button-new-tag" size="small" @click="showInput">+ Добавить тег</el-button>
+</div>
+
   </el-collapse-item>
   <el-collapse-item title="Дети" name="2">
     <div class="inCatagory"  v-for="(children, index) in childrens" :key="`children-${index}`">
@@ -56,6 +77,9 @@ export default {
   name: 'viewCustomer',
   data () {
     return {
+      dynamicTags:[],
+      inputVisible: false,
+      inputValue: '',
       children: {
         name: '',
         bday: ''
@@ -72,18 +96,39 @@ export default {
 
    },
   methods: {
+    handleClose(tag) {
+          db.collection('customers').doc(this.$route.params.customer).collection('tags').doc(tag['.key']).delete();
+      },
+
+      showInput() {
+        this.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+      },
+
+      handleInputConfirm() {
+        let inputValue = this.inputValue;
+        if (inputValue) {
+            db.collection('customers').doc(this.$route.params.customer).collection('tags').add({tag: inputValue})
+          //this.dynamicTags.push(inputValue);
+        }
+        this.inputVisible = false;
+        this.inputValue = '';
+      },
     ageClaculate: function (bday) {
       console.log(bday);
       var years = new Date(new Date() - new Date(bday)).getFullYear() - 1970;
       return years;
     },
-  
+
     deleteChildren: function(children) {
       db.collection('customers').doc(this.$route.params.customer).collection('childrens').doc(children['.key']).delete();
     },
       addChildren(children) {
         db.collection('customers').doc(this.$route.params.customer).collection('childrens').add(children)
         .then(function(docRef) {
+          
 
           console.log("Children added with ID: ", docRef.id)
         })
@@ -98,13 +143,30 @@ export default {
   firestore () {
     return {
       customer: db.collection('customers').doc(this.$route.params.customer),
-      childrens: db.collection('customers').doc(this.$route.params.customer).collection('childrens')
+      childrens: db.collection('customers').doc(this.$route.params.customer).collection('childrens'),
+      dynamicTags: db.collection('customers').doc(this.$route.params.customer).collection('tags')
     }
   }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+
 .marginRight {
   margin-right: 15px;
 }
