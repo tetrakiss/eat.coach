@@ -10,14 +10,21 @@
   </el-collapse-item>
   <el-collapse-item title="Дети" name="2">
     <div class="inCatagory"  v-for="(children, index) in childrens" :key="`children-${index}`">
-      <font-awesome-icon icon="user" class="marginRight"></font-awesome-icon>{{ children.name }} {{children.year}} лет <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteChildren(children)" type="danger" >Удалить</el-button>
+      <font-awesome-icon icon="user" class="marginRight"></font-awesome-icon>{{ children.name }} Дата рождения: {{children.bday}}  Лет: {{ageClaculate(children.bday)}}  <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteChildren(children)" type="danger" >Удалить</el-button>
     </div>
     <el-form ref="form" :model="children" label-width="15vw">
       <el-form-item label="Имя">
         <el-input v-model="children.name"></el-input>
       </el-form-item>
-      <el-form-item label="Возраст">
-        <el-input v-model="children.year"></el-input>
+      <el-form-item label="Дата рождения">
+        <el-date-picker
+          style="width: 100%;"
+          v-model="children.bday"
+          type="date"
+          format="dd.MM.yyyy"
+          value-format="dd.MM.yyyy"
+          placeholder="Выберите дату">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
       <el-button type="primary" @click="addChildren (children)">Добавить</el-button>
@@ -51,7 +58,7 @@ export default {
     return {
       children: {
         name: '',
-        year: ''
+        bday: ''
 
       },
       childrens:[],
@@ -60,13 +67,24 @@ export default {
       customer: []
     }
   },
+  computed: {
+     // геттер вычисляемого значения
+
+   },
   methods: {
+    ageClaculate: function (bday) {
+      console.log(bday);
+      var years = new Date(new Date() - new Date(bday)).getFullYear() - 1970;
+      return years;
+    },
+  
     deleteChildren: function(children) {
       db.collection('customers').doc(this.$route.params.customer).collection('childrens').doc(children['.key']).delete();
     },
       addChildren(children) {
         db.collection('customers').doc(this.$route.params.customer).collection('childrens').add(children)
         .then(function(docRef) {
+
           console.log("Children added with ID: ", docRef.id)
         })
         .catch(function(error) {
