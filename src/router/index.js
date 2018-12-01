@@ -7,6 +7,8 @@ import ViewCustomer from '@/components/viewCustomer'
 Vue.use(Router)
 
 export default new Router({
+  saveScrollPosition: true,
+  history: true,
   routes: [
     {
       path: '/',

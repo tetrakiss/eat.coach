@@ -7,6 +7,13 @@ import VueFirestore from 'vue-firestore'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/ru-RU'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUser, faMobileAlt, faEnvelopeOpen, faCalendar, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faUser, faMobileAlt, faEnvelopeOpen, faCalendar, faCalendarCheck)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 Vue.use(VueFirestore)

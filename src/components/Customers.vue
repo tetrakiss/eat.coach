@@ -37,36 +37,26 @@
       <el-form-item label="Дата последнего контакта">
         <el-date-picker
           style="width: 100%;"
-          v-model="dateInteraction"
+          v-model="form.dateInteraction"
           type="date"
-          format="dd-MM-yyyy"
+          format="dd.MM.yyyy"
+          value-format="dd.MM.yyyy"
           placeholder="Выберите дату">
         </el-date-picker>
       </el-form-item>
-    </el-form>
+
     <el-form-item>
-    <el-button type="primary" @click="addCustomer (firstName, lastName, email, phone, skype, dateInteraction)">Create</el-button>
+    <el-button type="primary" @click="addData (form)">Создать</el-button>
     <el-button>Cancel</el-button>
   </el-form-item>
-    <form >
-      <el-row :gutter="20">
-<el-col :span="6" ><el-input v-model="firstName" placeholder="Имя"></el-input></el-col>
-<el-col :span="6" ><el-input v-model="lastName" placeholder="Фамилия"></el-input></el-col>
-<el-col :span="6" ><el-input v-model="email" placeholder="email"></el-input></el-col>
-<el-col :span="6" ><el-input v-model="phone" placeholder="телефон"></el-input></el-col>
-<el-col :span="6" ><el-input v-model="skype" placeholder="skype"></el-input></el-col>
-<el-col :span="6" ><el-date-picker
-  v-model="dateInteraction"
-  type="date"
-  format="dd-MM-yyyy"
-  placeholder="Выберите дату">
-</el-date-picker></el-col>
-<el-col :span="6" > <el-button type="primary" @click="addCustomer (firstName, lastName, email, phone, skype, dateInteraction)">Create</el-button> </el-col>
-</el-row>
-</form>
-
+</el-form>
   </div>
-</el-card>
+  </el-card>
+
+
+
+
+
 
 
   </div>
@@ -85,7 +75,9 @@
           lastName: '',
           phone: '',
           skype: '',
-          email: ''
+          email: '',
+          createdAt: '',
+          dateInteraction: ''
 
         },
 
@@ -96,8 +88,7 @@
     },
     firestore () {
       return {
-
-        customers: db.collection('customers'),
+        customers: db.collection('customers')
       }
     },
     components: {
@@ -105,13 +96,24 @@
 
   },
     methods: {
+      addData:function(form) {
+         const createdAt = new Date()
+         var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+         form.createdAt= createdAt.toLocaleString('ru-RU', options)
+
+         db.collection('customers').add(form)
+         .then(function(docRef) {
+           console.log("Document written with ID: ", docRef.id)
+          this.$router.push({name:'viewCustomer',params:{customer:docRef.id}});
+         })
+         .catch(function(error) {
+            console.error("Error adding customer: ", error)
+         })
+
+      },
 
       viewCustomer:function(customer){
         this.$router.push({name:'viewCustomer',params:{customer:customer['.key']}});
-      },
-      addCustomer (firstName, lastName, email, phone, skype, dateInteraction) {
-     const createdAt = new Date()
-     db.collection('customers').add({ firstName, lastName, email, phone, skype, dateInteraction, createdAt })
       },
       deleteCustomer: function(customer) {
         this.$firestore.customers.doc(customer['.key']).delete();
@@ -122,7 +124,7 @@
 
 <style>
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
