@@ -42,6 +42,8 @@
 <template>
 
 <div class="viewCustomer">
+  <slide />
+  <main id="page-wrap">
     <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="Контактная информация" name="1">
             <div class="inCatagory">
@@ -98,7 +100,7 @@
             <div>Controlled consequences: users should be granted the freedom to operate, including canceling, aborting or terminating current operation.</div>
         </el-collapse-item>
     </el-collapse>
-
+</main>
 </div>
 
 </template>
@@ -106,6 +108,8 @@
 <script>
 
 import {db} from '@/components/firebaseInit'
+import Menu from '@/components/Menu';
+import slide from '@/components/Slide';
 export default {
     name: 'viewCustomer',
     data() {
@@ -127,6 +131,9 @@ export default {
     computed: {
         // геттер вычисляемого значения
 
+    },
+    components: {
+         slide
     },
     methods: {
         handleClose(tag) {

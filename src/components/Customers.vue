@@ -5,7 +5,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: #FFF;
     margin-top: 60px;
 }
 
@@ -40,9 +40,9 @@
 
 <template>
 
-<div id="app">
-
-
+<div style="height:100%;">
+  <slide />
+  <main id="page-wrap">
     <el-card class="box-card" v-for="(customer, index) in customers" :key="`customer-${index}`">
         <div slot="header" class="clearfix">
             <span>{{ customer.firstName }} {{ customer.lastName }}</span>
@@ -87,12 +87,7 @@
         </div>
     </el-card>
 
-
-
-
-
-
-
+  </main>
 </div>
 
 </template>
@@ -101,6 +96,8 @@
 
 import {db} from '@/components/firebaseInit'
 import datePicker from '@/components/datePicker'
+import Menu from '@/components/Menu';
+import slide from '@/components/Slide';
 
 export default {
     name: 'customers',
@@ -129,6 +126,7 @@ export default {
     },
     components: {
         'eat-datePicker': datePicker,
+         slide
 
     },
     methods: {
