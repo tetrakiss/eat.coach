@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
+import Logout from '@/components/Logout'
 import Dashboard from '@/components/Dashboard'
 import Customers from '@/components/Customers'
 import ViewCustomer from '@/components/viewCustomer'
@@ -26,6 +27,14 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/dashboard',
