@@ -1,6 +1,6 @@
 <template>
   <div style="height:100%;">
-    <slide  :noOverlay='true'/>
+    <slide  />
 
 
     <main id="page-wrap">
@@ -36,7 +36,7 @@ import slide from '@/components/Slide';
    }
 
    main {
-     
+
      padding: 3em 2em;
      text-align: center;
      background: #FFF;

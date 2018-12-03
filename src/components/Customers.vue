@@ -6,7 +6,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #FFF;
-    margin-top: 60px;
+
 }
 
 .reptileList {
@@ -45,7 +45,9 @@
   <main id="page-wrap">
     <el-card class="box-card" v-for="(customer, index) in customers" :key="`customer-${index}`">
         <div slot="header" class="clearfix">
+
             <span>{{ customer.firstName }} {{ customer.lastName }}</span>
+            <span>{{ new Date(customer.dateNextInteraction).toLocaleDateString() }}</span>
             <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteCustomer(customer)" type="danger">Удалить</el-button>
             <el-button style="float: right; padding: 5px;  margin:5px; " @click="viewCustomer(customer)" type="primary">Посмотреть</el-button>
         </div>
@@ -75,7 +77,11 @@
                     <el-input v-model="form.skype"></el-input>
                 </el-form-item>
                 <el-form-item label="Дата последнего контакта">
-                    <el-date-picker style="width: 100%;" v-model="form.dateInteraction" type="date" format="dd.MM.yyyy" value-format="dd.MM.yyyy" placeholder="Выберите дату">
+                    <el-date-picker style="width: 100%;" v-model="form.dateInteraction" type="date" format="dd.MM.yyyy"  placeholder="Выберите дату">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="Дата следующего контакта">
+                    <el-date-picker style="width: 100%;" v-model="form.dateNextInteraction" type="date" format="dd.MM.yyyy"  placeholder="Выберите дату">
                     </el-date-picker>
                 </el-form-item>
 
@@ -109,14 +115,13 @@ export default {
                 phone: '',
                 skype: '',
                 email: '',
-                createdAt: '',
-                dateInteraction: ''
-
+                createdAt: new Date(),
+                dateInteraction: new Date(),
+                dateNextInteraction:new Date(Date.now()+7*24*60*60*1000)
             },
 
-            customers: [],
-            newReptile: '',
-            dateInteraction: Date()
+            customers: []
+
         }
     },
     firestore() {
@@ -137,21 +142,23 @@ export default {
                 month: 'numeric',
                 day: 'numeric'
             };
-            form.createdAt = createdAt.toLocaleString('ru-RU', options)
+            //form.createdAt = createdAt.toLocaleDateString()
 
-            db.collection('customers').add(form)
-                .then(function(docRef) {
-                    console.log("Document written with ID: ", docRef.id)
-                    this.$router.push({
-                        name: 'viewCustomer',
-                        params: {
-                            customer: docRef.id
-                        }
-                    });
-                })
-                .catch(function(error) {
-                    console.error("Error adding customer: ", error)
-                })
+            db.collection('customers').add(form).then(
+              (docRef)=>{
+                this.$router.push({
+                    name: 'viewCustomer',
+                    params: {
+                        customer: docRef.id
+                    }
+                });
+              },
+              (error) =>
+              {
+                alert("Error adding customer: "+ error.message)
+              }
+            );
+
 
         },
 
