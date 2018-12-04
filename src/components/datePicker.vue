@@ -1,5 +1,4 @@
-
-
+/* eslint-disable no-alert, no-console */
 <template>
 
 <el-date-picker v-model="date" type="date" format="dd-MM-yyyy" placeholder="Выберите дату">

@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 <style>
 .logo {
   width: 20vw;
@@ -7,7 +8,7 @@
 .main {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
-  height: 100%;  
+  height: 100%;
   background-position: center;
       background-repeat: no-repeat;
       background-size: cover;

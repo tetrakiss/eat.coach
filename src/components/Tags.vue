@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 <style scoped>
 
 .el-tag, .el-tag + .el-tag {

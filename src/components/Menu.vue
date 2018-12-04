@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 <template>
     <div>
         <div id="sideNav" class="bm-menu">
@@ -220,7 +221,7 @@
     }
 
     .bm-overlay {
-    
+
     }
     .bm-item-list {
       color: #b8b7ad;

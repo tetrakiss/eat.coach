@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 <template>
   <div style="height:100%;">
     <slide  />

@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 <template>
     <div>
         <Menu v-bind="this.$attrs" @openMenu="openMenu" @closeMenu="closeMenu">

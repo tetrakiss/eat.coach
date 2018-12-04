@@ -1,7 +1,7 @@
+/* eslint-disable no-alert, no-console */
 <style>
 
-#app {
-    font-family: 'Ubuntu', sans-serif;
+#app {    
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -41,60 +41,34 @@
 <template>
 
 <div style="height:100%;">
-  <slide />
-  <main id="page-wrap">
-    <el-card class="box-card" v-for="(customer, index) in customers" :key="`customer-${index}`">
-        <div slot="header" class="clearfix">
-        
-           <tagsBar v-bind:customerRef="customer['.key']" />
-            <span>{{ customer.firstName }} {{ customer.lastName }}</span>
-            <span>{{ new Date(customer.dateNextInteraction).toLocaleDateString() }}</span>
-            <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteCustomer(customer)" type="danger">Удалить</el-button>
-            <el-button style="float: right; padding: 5px;  margin:5px; " @click="viewCustomer(customer)" type="primary">Посмотреть</el-button>
-        </div>
-        <div class="text item">
-            {{customer.email}}
-        </div>
-    </el-card>
-    <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <span>Добавить нового клинета</span>
-        </div>
-        <div class="text item">
-            <el-form ref="form" :model="form" label-width="15vw">
-                <el-form-item label="Имя">
-                    <el-input v-model="form.firstName"></el-input>
-                </el-form-item>
-                <el-form-item label="Фамилия">
-                    <el-input v-model="form.lastName"></el-input>
-                </el-form-item>
-                <el-form-item label="Email">
-                    <el-input v-model="form.email"></el-input>
-                </el-form-item>
-                <el-form-item label="Телефон">
-                    <el-input v-model="form.phone"></el-input>
-                </el-form-item>
-                <el-form-item label="Skype">
-                    <el-input v-model="form.skype"></el-input>
-                </el-form-item>
-                <el-form-item label="Дата последнего контакта">
-                    <el-date-picker style="width: 100%;" v-model="form.dateInteraction" type="date" format="dd.MM.yyyy"  placeholder="Выберите дату">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="Дата следующего контакта">
-                    <el-date-picker style="width: 100%;" v-model="form.dateNextInteraction" type="date" format="dd.MM.yyyy"  placeholder="Выберите дату">
-                    </el-date-picker>
-                </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" @click="addData (form)">Создать</el-button>
-                    <el-button>Cancel</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
-    </el-card>
+  <MainTemplate>
+    <template slot="header">
+      Клиенты
+    </template>
+    <template slot="main">
+      <main id="page-wrap">
+        <el-card class="box-card" v-for="(customer, index) in customers" :key="`customer-${index}`">
+            <div slot="header" class="clearfix">
 
-  </main>
+               <tagsBar v-bind:customerRef="customer['.key']" />
+                <span>{{ customer.firstName }} {{ customer.lastName }}</span>
+                <span>{{ new Date(customer.dateNextInteraction).toLocaleDateString() }}</span>
+                <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteCustomer(customer)" type="danger">Удалить</el-button>
+                <el-button style="float: right; padding: 5px;  margin:5px; " @click="viewCustomer(customer)" type="primary">Посмотреть</el-button>
+            </div>
+            <div class="text item">
+                {{customer.email}}
+            </div>
+        </el-card>
+        <addCustomer />
+
+
+      </main>
+    </template>
+  </MainTemplate>
+
+
 </div>
 
 </template>
@@ -102,11 +76,11 @@
 <script>
 
 import {db} from '@/components/firebaseInit'
-import datePicker from '@/components/datePicker'
 import Menu from '@/components/Menu';
 import slide from '@/components/Slide';
-import TagsBar from '@/components/Tags';
-
+import TagsBar from '@/components/Tags'
+import AddCustomer from '@/components/addCustomer';
+import MainTemplate from '@/components/MainTemplate';
 export default {
     name: 'customers',
     data() {
@@ -139,40 +113,12 @@ export default {
         }
     },
     components: {
-        'eat-datePicker': datePicker,
-         slide,
-         'tagsBar' : TagsBar
-
-
+          MainTemplate,
+          slide,
+         'tagsBar' : TagsBar,
+         'addCustomer' :AddCustomer
     },
     methods: {
-        addData: function(form) {
-            const createdAt = new Date()
-            var options = {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
-            //form.createdAt = createdAt.toLocaleDateString()
-
-            db.collection('customers').add(form).then(
-              (docRef)=>{
-                this.$router.push({
-                    name: 'viewCustomer',
-                    params: {
-                        customer: docRef.id
-                    }
-                });
-              },
-              (error) =>
-              {
-                alert("Error adding customer: "+ error.message)
-              }
-            );
-
-
-        },
-
         viewCustomer: function(customer) {
             this.$router.push({
                 name: 'viewCustomer',

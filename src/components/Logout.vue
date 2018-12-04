@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 <template>
   <div>
   <el-button @click="logout" type="warning">Выйти</el-button>
