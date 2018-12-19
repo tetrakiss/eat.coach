@@ -6,6 +6,7 @@ import Logout from '@/components/Logout'
 import Dashboard from '@/components/Dashboard'
 import Customers from '@/components/Customers'
 import ViewCustomer from '@/components/viewCustomer'
+import SearchResult from '@/components/SearchResult'
 import { auth } from '@/components/firebaseInit'
 
 Vue.use(Router)
@@ -52,6 +53,14 @@ const router = new Router({
       path: '/customers/customer/:customer',
       name: 'viewCustomer',
       component: ViewCustomer,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/search/results/:typeSearch/:inputSearch',
+      name: 'searchResult',
+      component: SearchResult,
       meta: {
         requiresAuth: true
       }

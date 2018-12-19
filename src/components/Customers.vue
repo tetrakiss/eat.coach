@@ -1,7 +1,7 @@
 /* eslint-disable no-alert, no-console */
 <style>
 
-#app {    
+#app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -43,24 +43,17 @@
 <div style="height:100%;">
 
   <MainTemplate>
+
     <template slot="header">
       Клиенты
     </template>
     <template slot="main">
+      <SearchBar />
       <main id="page-wrap">
-        <el-card class="box-card" v-for="(customer, index) in customers" :key="`customer-${index}`">
-            <div slot="header" class="clearfix">
-
-               <tagsBar v-bind:customerRef="customer['.key']" />
-                <span>{{ customer.firstName }} {{ customer.lastName }}</span>
-                <span>{{ new Date(customer.dateNextInteraction).toLocaleDateString() }}</span>
-                <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteCustomer(customer)" type="danger">Удалить</el-button>
-                <el-button style="float: right; padding: 5px;  margin:5px; " @click="viewCustomer(customer)" type="primary">Посмотреть</el-button>
-            </div>
-            <div class="text item">
-                {{customer.email}}
-            </div>
-        </el-card>
+      <div v-for="(customer, index) in customers" :key="`customerCard-${index}`">>
+        <CustomerCard :customer="customer"/>
+      </div>
+      
         <addCustomer />
 
 
@@ -78,24 +71,14 @@
 import {db} from '@/components/firebaseInit'
 import Menu from '@/components/Menu';
 import slide from '@/components/Slide';
-import TagsBar from '@/components/Tags'
+import SearchBar from '@/components/SearchBar';
 import AddCustomer from '@/components/addCustomer';
 import MainTemplate from '@/components/MainTemplate';
+import CustomerCard from '@/components/CustomerCard';
 export default {
     name: 'customers',
     data() {
         return {
-            form: {
-                firstName: '',
-                lastName: '',
-                phone: '',
-                skype: '',
-                email: '',
-                createdAt: new Date(),
-                dateInteraction: new Date(),
-                dateNextInteraction:new Date(Date.now()+7*24*60*60*1000)
-            },
-
             customers: []
 
         }
@@ -103,33 +86,19 @@ export default {
     firestore() {
         return {
             customers: db.collection('customers')
-            /*customers: db.collection('customers').then(
-              (snapshot) => {
-                snapshot.docs.forEach((doc) => {
-                  const tags = doc.data()
-                  customers.push(tags)
-                })
-            })*/
+
         }
     },
     components: {
           MainTemplate,
           slide,
-         'tagsBar' : TagsBar,
+          CustomerCard,
+          SearchBar,
          'addCustomer' :AddCustomer
     },
     methods: {
-        viewCustomer: function(customer) {
-            this.$router.push({
-                name: 'viewCustomer',
-                params: {
-                    customer: customer['.key']
-                }
-            });
-        },
-        deleteCustomer: function(customer) {
-            this.$firestore.customers.doc(customer['.key']).delete();
-        }
+
+
     }
 }
 
