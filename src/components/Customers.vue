@@ -48,16 +48,15 @@
       Клиенты
     </template>
     <template slot="main">
-      <SearchBar />
-      <main id="page-wrap">
+      <SearchBar />      
       <div v-for="(customer, index) in customers" :key="`customerCard-${index}`">>
         <CustomerCard :customer="customer"/>
       </div>
-      
+
         <addCustomer />
 
 
-      </main>
+
     </template>
   </MainTemplate>
 

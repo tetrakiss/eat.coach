@@ -42,70 +42,83 @@
 
 <template>
 
-<div class="viewCustomer">
-  <slide />
-  <main id="page-wrap">
+<div>
+  <MainTemplate>
 
-      <el-row type="flex" class="row-bg" justify="center">
-        <el-col :span="12">
-          <div class="grid-content">
-            <el-collapse v-model="activeNames" @change="handleChange">
-                <el-collapse-item title="Контактная информация" name="1">
-                    <div class="inCatagory">
-                        <font-awesome-icon icon="user" class="marginRight"></font-awesome-icon>{{ customer.firstName }} {{customer.lastName}}</div>
-                    <div class="inCatagory">
-                        <font-awesome-icon icon="mobile-alt" class="marginRight"></font-awesome-icon>{{ customer.phone }}</div>
-                    <div class="inCatagory">
-                        <font-awesome-icon icon="envelope-open" class="marginRight"></font-awesome-icon>{{ customer.email }}</div>
-                    <div class="inCatagory">
-                        <font-awesome-icon icon="calendar" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
-                    <div class="inCatagory">
-                        <font-awesome-icon icon="calendar-check" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
-                        <tagsBar v-bind:customerRef="this.id" />
+    <template slot="header">
+      {{ customer.firstName }} {{customer.lastName}}
+    </template>
+    <template slot="main">
+      <SearchBar />
+      <main id="page-wrap">
+        <el-row type="flex" class="row-bg" justify="center">
+          <el-col :span="24">
+            <div class="grid-content">
+              <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item title="Контактная информация" name="1">
+                      <div class="inCatagory">
+                          <font-awesome-icon icon="user" class="marginRight"></font-awesome-icon>{{ customer.firstName }} {{customer.lastName}}</div>
+                      <div class="inCatagory">
+                          <font-awesome-icon icon="mobile-alt" class="marginRight"></font-awesome-icon>{{ customer.phone }}</div>
+                      <div class="inCatagory">
+                          <font-awesome-icon icon="envelope-open" class="marginRight"></font-awesome-icon>{{ customer.email }}</div>
+                      <div class="inCatagory">
+                          <font-awesome-icon icon="calendar" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
+                      <div class="inCatagory">
+                          <font-awesome-icon icon="calendar-check" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
+                          <tagsBar v-bind:customerRef="this.id" />
 
 
-                </el-collapse-item>
-                <el-collapse-item title="Дети" name="2">
-                    <div class="inCatagory" v-for="(children, index) in childrens" :key="`children-${index}`">
-                        <font-awesome-icon icon="user" class="marginRight"></font-awesome-icon>{{ children.name }} Дата рождения: {{children.bday}} Лет: {{ageClaculate(children.bday)}}
-                        <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteChildren(children)" type="danger">Удалить</el-button>
-                    </div>
-                    <el-form ref="form" :model="children" label-width="15vw">
-                        <el-form-item label="Имя">
-                            <el-input v-model="children.name"></el-input>
-                        </el-form-item>
-                        <el-form-item label="Дата рождения">
-                            <el-date-picker style="width: 100%;" v-model="children.bday" type="date" format="dd.MM.yyyy" value-format="dd.MM.yyyy" placeholder="Выберите дату">
-                            </el-date-picker>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="addChildren (children)">Добавить</el-button>
-                            <el-button>Cancel</el-button>
-                        </el-form-item>
-                    </el-form>
+                  </el-collapse-item>
+                  <el-collapse-item title="Дети" name="2">
+                      <div class="inCatagory" v-for="(children, index) in childrens" :key="`children-${index}`">
+                          <font-awesome-icon icon="user" class="marginRight"></font-awesome-icon>{{ children.name }} Дата рождения: {{children.bday}} Лет: {{ageClaculate(children.bday)}}
+                          <el-button style="float: right; padding: 5px; margin:5px;" @click="deleteChildren(children)" type="danger">Удалить</el-button>
+                      </div>
+                      <el-form ref="form" :model="children" label-width="15vw">
+                          <el-form-item label="Имя">
+                              <el-input v-model="children.name"></el-input>
+                          </el-form-item>
+                          <el-form-item label="Дата рождения">
+                              <el-date-picker style="width: 100%;" v-model="children.bday" type="date" format="dd.MM.yyyy" value-format="dd.MM.yyyy" placeholder="Выберите дату">
+                              </el-date-picker>
+                          </el-form-item>
+                          <el-form-item>
+                              <el-button type="primary" @click="addChildren (children)">Добавить</el-button>
+                              <el-button>Cancel</el-button>
+                          </el-form-item>
+                      </el-form>
 
-                </el-collapse-item>
-                <el-collapse-item title="Назначения" name="3">
-                    <div>Simplify the process: keep operating process simple and intuitive;</div>
-                    <div>Definite and clear: enunciate your intentions clearly so that the users can quickly understand and make decisions;</div>
-                    <div>Easy to identify: the interface should be straightforward, which helps the users to identify and frees them from memorizing and recalling.</div>
-                </el-collapse-item>
-                <el-collapse-item title="Комментарий" name="4">
-                    <div>Decision making: giving advices about operations is acceptable, but do not make decisions for the users;</div>
-                    <div>Controlled consequences: users should be granted the freedom to operate, including canceling, aborting or terminating current operation.</div>
-                </el-collapse-item>
-                <el-collapse-item title="Диалог" name="5">
-                    <div>Decision making: giving advices about operations is acceptable, but do not make decisions for the users;</div>
-                    <div>Controlled consequences: users should be granted the freedom to operate, including canceling, aborting or terminating current operation.</div>
-                </el-collapse-item>
-            </el-collapse>
+                  </el-collapse-item>
+                  <el-collapse-item title="Назначения" name="3">
+                      <div>Simplify the process: keep operating process simple and intuitive;</div>
+                      <div>Definite and clear: enunciate your intentions clearly so that the users can quickly understand and make decisions;</div>
+                      <div>Easy to identify: the interface should be straightforward, which helps the users to identify and frees them from memorizing and recalling.</div>
+                  </el-collapse-item>
+                  <el-collapse-item title="Комментарий" name="4">
+                      <div>Decision making: giving advices about operations is acceptable, but do not make decisions for the users;</div>
+                      <div>Controlled consequences: users should be granted the freedom to operate, including canceling, aborting or terminating current operation.</div>
+                  </el-collapse-item>
+                  <el-collapse-item title="Диалог" name="5">
+                      <div>Decision making: giving advices about operations is acceptable, but do not make decisions for the users;</div>
+                      <div>Controlled consequences: users should be granted the freedom to operate, including canceling, aborting or terminating current operation.</div>
+                  </el-collapse-item>
+              </el-collapse>
 
-          </div>
+            </div>
 
-        </el-col>
-      </el-row>
-  </main>
+          </el-col>
+        </el-row>
+
+
+      </main>
+    </template>
+  </MainTemplate>
+
 </div>
+
+
+
 
 </template>
 
@@ -115,6 +128,7 @@ import {db} from '@/components/firebaseInit'
 import Menu from '@/components/Menu';
 import slide from '@/components/Slide';
 import TagsBar from '@/components/Tags';
+import MainTemplate from '@/components/MainTemplate';
 export default {
     name: 'viewCustomer',
     data() {
@@ -138,6 +152,7 @@ export default {
 
     },
     components: {
+         MainTemplate,
          slide,
          'tagsBar' : TagsBar
     },

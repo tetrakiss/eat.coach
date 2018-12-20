@@ -1,6 +1,11 @@
+<style>
+.addCustomerCard {
+  width: 100%;
+}
+</style>
 <template>
   <div>
-    <el-card class="box-card">
+    <el-card class="box-card addCustomerCard">
         <div slot="header" class="clearfix">
             <span>Добавить нового клинета</span>
         </div>
