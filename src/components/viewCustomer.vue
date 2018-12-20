@@ -65,7 +65,7 @@
                       <div class="inCatagory">
                           <font-awesome-icon icon="calendar" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
                       <div class="inCatagory">
-                          <font-awesome-icon icon="calendar-check" class="marginRight"></font-awesome-icon>{{ customer.createdAt }}</div>
+                          <font-awesome-icon icon="calendar-check" class="marginRight"></font-awesome-icon>{{ customer.dateNextInteraction }}</div>
                           <tagsBar v-bind:customerRef="this.id" />
 
 

@@ -6,11 +6,11 @@
         Вы искали : {{ inputSearch }}
       </template>
       <template slot="main">
-        <div v-for="(customer, index) in customers" :key="`customerCard-${index}`">>
+        <div v-for="(customer, index) in customers" :key="`customerCard-${index}`">
           <CustomerCard :customer="customer"/>
         </div>
       </template>
-    </MainTemplate>   
+    </MainTemplate>
 
 </div>
 </template>
@@ -22,6 +22,7 @@ export default {
     name: 'searchResult',
     data() {
         return {
+
             inputSearch: this.$route.params.inputSearch,
             typeSearch: this.$route.params.typeSearch,
             customers: []
@@ -38,11 +39,15 @@ export default {
 
     },
     firestore() {
-        return {
-              customers: db.collection('customers').where(this.typeSearch, "==", this.inputSearch)
+      var customers;
+      if (this.typeSearch == 'dateNextInteraction')
+      {
+        customers = db.collection('customers').where(this.typeSearch, ">=", new Date(this.$route.params.inputSearch))
 
-
-        }
+      }else {
+         customers = db.collection('customers').where(this.typeSearch, "==", this.inputSearch)
+      };
+        return {customers}
     }
 }
 

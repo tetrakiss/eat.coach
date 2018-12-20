@@ -58,14 +58,15 @@ export default {
                 email: '',
                 createdAt: new Date(),
                 dateInteraction: new Date(),
-                dateNextInteraction:new Date(Date.now()+7*24*60*60*1000)
+                dateNextInteraction:new Date(new Date().setHours(0,0,0,0)+7*24*60*60*1000)
             }
 
         }
     },
     methods: {
         addData: function(form) {
-            const createdAt = new Date()
+            const createdAt = new Date();
+
 
             db.collection('customers').add(form).then(
               (docRef)=>{
